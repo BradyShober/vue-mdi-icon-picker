@@ -1,17 +1,15 @@
 {
-  "name": "mdi-icon-picker",
-  "version": "0.1.0",
-  "private": true,
+  "name": "vue-mdi-icon-picker",
+  "version": "1.0.0",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "build": "cross-env NODE_ENV=production webpack --progress"
   },
   "dependencies": {
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
-    "vue-property-decorator": "^9.1.2"
+    "vue-property-decorator": "^9.1.2",
+    "vuetify": "^2.4.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",
@@ -21,9 +19,21 @@
     "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/eslint-config-typescript": "^7.0.0",
+    "babel-loader": "^8.2.2",
+    "cross-env": "^7.0.3",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "file-loader": "^6.2.0",
+    "sass": "^1.32.0",
+    "sass-loader": "^10.0.0",
     "typescript": "~4.1.5",
-    "vue-template-compiler": "^2.6.11"
+    "url-loader": "^4.1.1",
+    "vue-cli-plugin-vuetify": "^2.3.1",
+    "vue-loader": "^15.9.6",
+    "vue-template-compiler": "^2.6.11",
+    "vuetify-loader": "^1.7.0",
+    "webpack": "^5.33.2",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2"
   }
 }

@@ -1,24 +1,15 @@
 # mdi-icon-picker
 
-## Project setup
+## Installation
 ```
-npm install
+npm install vue-mdi-icon-picker
 ```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+import MdiIconPicker from 'vue-mdi-icon-picker'
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Props
+v-model: Currently selected icon
+icons: JSON of the meta.json from the version of https://github.com/Templarian/MaterialDesign-SVG being used
