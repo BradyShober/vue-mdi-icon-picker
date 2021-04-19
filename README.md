@@ -5,9 +5,12 @@
 npm install vue-mdi-icon-picker
 ```
 
-### Compiles and hot-reloads for development
+### Usage
 ```
 import MdiIconPicker from 'vue-mdi-icon-picker'
+```
+```
+<MdiIconPicker v-model="icon" :icons="icons" @select="onSelect">
 ```
 
 ### Props
