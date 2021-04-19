@@ -5,6 +5,14 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --progress"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BradyShober/vue-mdi-icon-picker"
+  },
+  "bugs": {
+    "url": "https://github.com/BradyShober/vue-mdi-icon-picker/issues",
+    "email": "brady.shober@gmail.com"
+  },
   "dependencies": {
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
