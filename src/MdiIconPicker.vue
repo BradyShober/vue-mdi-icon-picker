@@ -8,7 +8,7 @@
         </v-row>
         <v-row dense style="max-height: 200px; max-width: 300px;">
             <v-col cols="4" v-for="icon in filteredIcons" :key="icon.name">
-                <v-icon v-on="on" @click="selectedIcon(icon.name)" large :title="icon.name">mdi-{{icon.name}}</v-icon>
+                <v-icon @click="selectedIcon(icon.name)" large :title="icon.name">mdi-{{icon.name}}</v-icon>
             </v-col>
         </v-row>
     </v-menu>
