@@ -7,9 +7,13 @@
             <v-text-field placeholder="Search" outlined class="pb-2" @input="updateSearch" v-on:click.stop />
         </v-row>
         <v-row dense style="max-height: 200px; max-width: 300px;">
-            <v-col cols="4" v-for="icon in filteredIcons" :key="icon.name">
-                <v-icon @click="selectedIcon(icon.name)" large :title="icon.name">mdi-{{icon.name}}</v-icon>
-            </v-col>
+            <v-virtual-scroll :items="filteredIcons" :item-height="50" :bench="0" height="235" style="top: -35px;">
+                <template v-slot:default="{ item }">
+
+                    <v-icon @click="selectedIcon(item.name)" large :title="item.name">mdi-{{item.name}}</v-icon>
+
+                </template>
+            </v-virtual-scroll>
         </v-row>
     </v-menu>
 </template>
