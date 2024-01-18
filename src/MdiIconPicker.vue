@@ -19,9 +19,16 @@
 </template>
 <script lang="ts">
     import { Component, Vue, Prop } from 'vue-property-decorator';
+    import {VMenu, VRow, VIcon, VTextField, VVirtualScroll} from 'vuetify/lib';
 
     @Component({
-        components: {}
+        components: {
+            VMenu,
+            VRow,
+            VIcon,
+            VTextField,
+            VVirtualScroll
+        }
     })
     export default class MdiIconPicker extends Vue {
         @Prop()
