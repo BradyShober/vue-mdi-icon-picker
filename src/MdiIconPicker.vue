@@ -18,49 +18,52 @@
     </v-menu>
 </template>
 <script lang="ts">
-    import { Component, Vue, Prop } from 'vue-property-decorator';
-    import {VMenu, VRow, VIcon, VTextField, VVirtualScroll} from 'vuetify/lib';
+import {VMenu, VRow, VIcon, VTextField, VVirtualScroll} from 'vuetify/lib';
+import { defineComponent, PropType } from "vue";
 
-    @Component({
+    export default defineComponent({
         components: {
             VMenu,
             VRow,
             VIcon,
             VTextField,
             VVirtualScroll
-        }
-    })
-    export default class MdiIconPicker extends Vue {
-        @Prop()
-        value: string
-
-        @Prop()
-        icons: Array<any>
-
-        search = ""
-
-        id = ""
-
+        },
+        data() {
+            return {
+                search: "",
+                id: ""
+            };
+        },
+        computed: {
+            filteredIcons() {
+                return this.icons.filter(i => i.name.includes(this.search) || i.aliases.includes(this.search) || i.tags.includes(this.search));
+            },
+            idQuery() {
+                return `#${this.id}`;
+            }
+        },
         created() {
             this.id = Math.random().toString(36).replace('0.', 'icon-picker' || '')
+        },
+        methods: {
+            selectedIcon(icon: string) {
+                this.$emit('select', `mdi-${icon}`);
+            },
+            updateSearch(e: string) {
+                this.search = e;
+            }
+        },
+        props: {
+            value: {
+                type: String
+            },
+            icons: {
+                type: Object as PropType<Array<any>>
+            }
         }
+    })
 
-        selectedIcon(icon: string) {
-            this.$emit('select', `mdi-${icon}`);
-        }
-
-        updateSearch(e: string) {
-            this.search = e;
-        }
-
-        get filteredIcons() {
-            return this.icons.filter(i => i.name.includes(this.search) || i.aliases.includes(this.search) || i.tags.includes(this.search));
-        }
-
-        get idQuery() {
-            return `#${this.id}`;
-        }
-    }
 </script>
 <style scoped>
     .v-menu__content {
