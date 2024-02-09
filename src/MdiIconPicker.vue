@@ -1,21 +1,50 @@
 <template>
-    <v-menu v-if="id !== ''" offset-y :close-on-content-click="false" :attach="idQuery">
-        <template v-slot:activator="{ on, attrs }">
-            <v-icon v-bind="attrs" v-on="on" x-large :id="id">{{value}}</v-icon>
+  <v-menu
+    v-if="id !== ''"
+    :close-on-content-click="false"
+    :attach="idQuery"
+  >
+    <template #activator="{ props }">
+      <v-icon
+        v-bind="props"
+        :id="id"
+        size="x-large"
+      >
+        {{ value }}
+      </v-icon>
+    </template>
+    <v-row dense>
+      <v-text-field
+        placeholder="Search"
+        variant="outlined"
+        class="pb-2"
+        @update:model-value="updateSearch"
+        @click.stop
+      />
+    </v-row>
+    <v-row
+      dense
+      style="max-height: 200px; max-width: 300px;"
+    >
+      <v-virtual-scroll
+        :items="filteredIcons"
+        :item-height="50"
+        :bench="0"
+        height="235"
+        style="top: -35px;"
+      >
+        <template #default="{ item }">
+          <v-icon
+            size="large"
+            :title="item.name"
+            @click="selectedIcon(item.name)"
+          >
+            mdi-{{ item.name }}
+          </v-icon>
         </template>
-        <v-row dense>
-            <v-text-field placeholder="Search" outlined class="pb-2" @input="updateSearch" v-on:click.stop />
-        </v-row>
-        <v-row dense style="max-height: 200px; max-width: 300px;">
-            <v-virtual-scroll :items="filteredIcons" :item-height="50" :bench="0" height="235" style="top: -35px;">
-                <template v-slot:default="{ item }">
-
-                    <v-icon @click="selectedIcon(item.name)" large :title="item.name">mdi-{{item.name}}</v-icon>
-
-                </template>
-            </v-virtual-scroll>
-        </v-row>
-    </v-menu>
+      </v-virtual-scroll>
+    </v-row>
+  </v-menu>
 </template>
 <script lang="ts">
 import {VMenu, VRow, VIcon, VTextField, VVirtualScroll} from 'vuetify/lib';
@@ -28,6 +57,14 @@ import { defineComponent, PropType } from "vue";
             VIcon,
             VTextField,
             VVirtualScroll
+        },
+        props: {
+            value: {
+                type: String
+            },
+            icons: {
+                type: Object as PropType<Array<any>>
+            }
         },
         data() {
             return {
@@ -52,14 +89,6 @@ import { defineComponent, PropType } from "vue";
             },
             updateSearch(e: string) {
                 this.search = e;
-            }
-        },
-        props: {
-            value: {
-                type: String
-            },
-            icons: {
-                type: Object as PropType<Array<any>>
             }
         }
     })
