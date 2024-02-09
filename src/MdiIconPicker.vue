@@ -47,17 +47,9 @@
   </v-menu>
 </template>
 <script lang="ts">
-import {VMenu, VRow, VIcon, VTextField, VVirtualScroll} from 'vuetify/lib';
 import { defineComponent, PropType } from "vue";
 
     export default defineComponent({
-        components: {
-            VMenu,
-            VRow,
-            VIcon,
-            VTextField,
-            VVirtualScroll
-        },
         props: {
             value: {
                 type: String
