@@ -2,7 +2,13 @@
   "name": "vue-mdi-icon-picker",
   "version": "1.1.2",
   "main": "./dist/vue-mdi-icon-picker.umd.js",
-  "module": "./dist/vue-mdi-icon-picker.es.js",
+  "module": "./dist/vue-mdi-icon-picker.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-mdi-icon-picker.mjs",
+      "require": "./dist/vue-mdi-icon-picker.umd.js"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
