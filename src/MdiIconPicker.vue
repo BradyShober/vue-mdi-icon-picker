@@ -1,70 +1,78 @@
 <template>
-    <v-menu v-if="id !== ''" offset-y :close-on-content-click="false" :attach="idQuery">
-        <template v-slot:activator="{ on, attrs }">
-            <v-icon v-bind="attrs" v-on="on" x-large :id="id">{{value}}</v-icon>
-        </template>
-        <v-row dense>
-            <v-text-field placeholder="Search" outlined class="pb-2" @input="updateSearch" v-on:click.stop />
-        </v-row>
-        <v-row dense style="max-height: 200px; max-width: 300px;">
-            <v-virtual-scroll :items="filteredIcons" :item-height="50" :bench="0" height="235" style="top: -35px;">
-                <template v-slot:default="{ item }">
-
-                    <v-icon @click="selectedIcon(item.name)" large :title="item.name">mdi-{{item.name}}</v-icon>
-
-                </template>
-            </v-virtual-scroll>
-        </v-row>
-    </v-menu>
+  <div v-if="id !== ''">
+    <Popover ref="popoverRef">
+      <template #default>
+        <div class="flex flex-wrap">
+          <InputText
+            placeholder="Search"
+            class="mb-2! w-full!"
+            @update:model-value="updateSearch"
+            @click.stop
+          />
+        </div>
+        <div class="max-h-[200px] max-w-[300px] overflow-y-auto">
+          <template v-for="item in filteredIcons" :key="item.name">
+            <i
+              class="mdi cursor-pointer p-1 text-2xl!"
+              :class="'mdi-' + item.name"
+              :title="item.name"
+              @click="selectedIcon(item.name)"
+            ></i>
+          </template>
+        </div>
+      </template>
+    </Popover>
+    <i
+      :id="id"
+      :class="['mdi', modelValue, 'text-3xl', 'cursor-pointer']"
+      @click="togglePopover"
+    ></i>
+  </div>
 </template>
-<script lang="ts">
-    import { Component, Vue, Prop } from 'vue-property-decorator';
-    import {VMenu, VRow, VIcon, VTextField, VVirtualScroll} from 'vuetify/lib';
 
-    @Component({
-        components: {
-            VMenu,
-            VRow,
-            VIcon,
-            VTextField,
-            VVirtualScroll
-        }
-    })
-    export default class MdiIconPicker extends Vue {
-        @Prop()
-        value: string
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
+import Popover from 'primevue/popover';
+import InputText from 'primevue/inputtext';
 
-        @Prop()
-        icons: Array<any>
+const props = defineProps<{
+  modelValue?: string;
+  icons?: Array<any>;
+}>();
 
-        search = ""
+const emit = defineEmits<{
+  (event: 'select', icon: string): void;
+}>();
 
-        id = ""
+const search = ref('');
+const id = ref('');
+const popoverRef = ref();
 
-        created() {
-            this.id = Math.random().toString(36).replace('0.', 'icon-picker' || '')
-        }
+const filteredIcons = computed(() => {
+  if (!props.icons) return [];
+  return props.icons.filter(
+    (i) =>
+      i.name.includes(search.value) ||
+      i.aliases.includes(search.value) ||
+      i.tags.includes(search.value)
+  );
+});
 
-        selectedIcon(icon: string) {
-            this.$emit('select', `mdi-${icon}`);
-        }
+onMounted(() => {
+  id.value = Math.random().toString(36).replace('0.', 'icon-picker');
+});
 
-        updateSearch(e: string) {
-            this.search = e;
-        }
+function selectedIcon(icon: string) {
+  emit('select', `mdi-${icon}`);
+  search.value = '';
+  popoverRef.value?.hide();
+}
 
-        get filteredIcons() {
-            return this.icons.filter(i => i.name.includes(this.search) || i.aliases.includes(this.search) || i.tags.includes(this.search));
-        }
+function updateSearch(e: string) {
+  search.value = e;
+}
 
-        get idQuery() {
-            return `#${this.id}`;
-        }
-    }
+function togglePopover(event: Event) {
+  popoverRef.value?.toggle(event);
+}
 </script>
-<style scoped>
-    .v-menu__content {
-        min-width: 300px !important;
-        background-color: white;
-    }
-</style>

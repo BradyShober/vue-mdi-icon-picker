@@ -1,11 +1,11 @@
 import MdiIconPicker from "./MdiIconPicker.vue";
 
-export default MdiIconPicker;
-
-MdiIconPicker.install = function(Vue) {
-  Vue.component(MdiIconPicker.name, MdiIconPicker);
+MdiIconPicker.install = function(app) {
+  app.component(MdiIconPicker.name, MdiIconPicker);
 };
 
-if(typeof window !== "undefined" && window.Vue) {
+export default MdiIconPicker;
+
+if (typeof window !== "undefined" && window.Vue) {
   window.Vue.component(MdiIconPicker.name, MdiIconPicker);
 }
