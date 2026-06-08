@@ -1,136 +1,78 @@
 <template>
-  <div class="mdi-icon-picker" v-if="id">
-    <span class="mdi-icon-picker-trigger" :id="id" @click="togglePanel">
-      <i :class="['mdi', modelValue]" aria-hidden="true"></i>
-    </span>
-    <OverlayPanel ref="overlay" appendTo="body" :dismissable="true" :style="{ minWidth: '300px', backgroundColor: 'white' }">
-      <div class="mdi-icon-picker-panel">
-        <div class="p-field p-mb-2">
-          <InputText v-model="search" placeholder="Search" @click.stop />
+  <div v-if="id !== ''">
+    <Popover ref="popoverRef">
+      <template #default>
+        <div class="flex flex-wrap">
+          <InputText
+            placeholder="Search"
+            class="mb-2! w-full!"
+            @update:model-value="updateSearch"
+            @click.stop
+          />
         </div>
-        <VirtualScroller :items="filteredIcons" :item-size="50" scroll-height="235px" style="width: 100%">
-          <template #default="{ item }">
-            <div class="mdi-icon-picker-item" @click="selectedIcon(item.name)">
-              <i :class="['mdi', `mdi-${item.name}`]" :title="item.name" aria-hidden="true"></i>
-              <span class="mdi-icon-picker-name">{{ item.name }}</span>
-            </div>
+        <div class="max-h-[200px] max-w-[300px] overflow-y-auto">
+          <template v-for="item in filteredIcons" :key="item.name">
+            <i
+              class="mdi cursor-pointer p-1 text-2xl!"
+              :class="'mdi-' + item.name"
+              :title="item.name"
+              @click="selectedIcon(item.name)"
+            ></i>
           </template>
-        </VirtualScroller>
-      </div>
-    </OverlayPanel>
+        </div>
+      </template>
+    </Popover>
+    <i
+      :id="id"
+      :class="['mdi', modelValue, 'text-3xl', 'cursor-pointer']"
+      @click="togglePopover"
+    ></i>
   </div>
 </template>
 
-<script>
-import { defineComponent, ref, computed, onMounted } from 'vue';
-import OverlayPanel from 'primevue/overlaypanel';
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
+import Popover from 'primevue/popover';
 import InputText from 'primevue/inputtext';
-import VirtualScroller from 'primevue/virtualscroller';
 
-export default defineComponent({
-  name: 'MdiIconPicker',
-  components: {
-    OverlayPanel,
-    InputText,
-    VirtualScroller
-  },
-  props: {
-    modelValue: {
-      type: String,
-      default: ''
-    },
-    icons: {
-      type: Array,
-      default: () => []
-    }
-  },
-  emits: ['update:modelValue', 'select'],
-  setup(props, { emit }) {
-    const search = ref('');
-    const id = ref('');
-    const overlay = ref(null);
+const props = defineProps<{
+  modelValue?: string;
+  icons?: Array<any>;
+}>();
 
-    const filteredIcons = computed(() => {
-      const query = search.value.toLowerCase();
-      return props.icons.filter(icon => {
-        const nameMatch = icon.name && icon.name.toLowerCase().includes(query);
-        const aliasMatch = Array.isArray(icon.aliases) && icon.aliases.some(alias => alias.toLowerCase().includes(query));
-        const tagMatch = Array.isArray(icon.tags) && icon.tags.some(tag => tag.toLowerCase().includes(query));
-        return nameMatch || aliasMatch || tagMatch;
-      });
-    });
+const emit = defineEmits<{
+  (event: 'select', icon: string): void;
+}>();
 
-    onMounted(() => {
-      id.value = Math.random().toString(36).replace('0.', 'icon-picker');
-    });
+const search = ref('');
+const id = ref('');
+const popoverRef = ref();
 
-    const togglePanel = event => {
-      if (overlay.value && overlay.value.toggle) {
-        overlay.value.toggle(event);
-      }
-    };
-
-    const selectedIcon = icon => {
-      const value = `mdi-${icon}`;
-      emit('update:modelValue', value);
-      emit('select', value);
-      if (overlay.value && overlay.value.hide) {
-        overlay.value.hide();
-      }
-    };
-
-    return {
-      search,
-      id,
-      overlay,
-      filteredIcons,
-      togglePanel,
-      selectedIcon
-    };
-  }
+const filteredIcons = computed(() => {
+  if (!props.icons) return [];
+  return props.icons.filter(
+    (i) =>
+      i.name.includes(search.value) ||
+      i.aliases.includes(search.value) ||
+      i.tags.includes(search.value)
+  );
 });
+
+onMounted(() => {
+  id.value = Math.random().toString(36).replace('0.', 'icon-picker');
+});
+
+function selectedIcon(icon: string) {
+  emit('select', `mdi-${icon}`);
+  search.value = '';
+  popoverRef.value?.hide();
+}
+
+function updateSearch(e: string) {
+  search.value = e;
+}
+
+function togglePopover(event: Event) {
+  popoverRef.value?.toggle(event);
+}
 </script>
-
-<style scoped>
-.mdi-icon-picker {
-  display: inline-block;
-}
-
-.mdi-icon-picker-trigger {
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.mdi-icon-picker-panel {
-  min-width: 300px;
-}
-
-.mdi-icon-picker-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  cursor: pointer;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.mdi-icon-picker-item:last-child {
-  border-bottom: none;
-}
-
-.mdi-icon-picker-item:hover {
-  background: #f5f5f5;
-}
-
-.mdi-icon-picker-item i {
-  font-size: 1.25rem;
-}
-
-.mdi-icon-picker-name {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-</style>
