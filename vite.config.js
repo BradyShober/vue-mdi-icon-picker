@@ -17,7 +17,7 @@ export default defineConfig({
       formats: ['es', 'umd']
     },
     rollupOptions: {
-      external: ['vue'],
+      external: ['vue', /^primevue/],
       output: {
         globals: {
           vue: 'Vue'
