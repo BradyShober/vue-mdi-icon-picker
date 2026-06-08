@@ -8,7 +8,7 @@
         <div class="p-field p-mb-2">
           <InputText v-model="search" placeholder="Search" @click.stop />
         </div>
-        <VirtualScroller :items="filteredIcons" :item-size="50" :bench="0" style="height:235px; overflow-y:auto;">
+        <VirtualScroller :items="filteredIcons" :item-size="50" scroll-height="235px" style="width: 100%">
           <template #default="{ item }">
             <div class="mdi-icon-picker-item" @click="selectedIcon(item.name)">
               <i :class="['mdi', `mdi-${item.name}`]" :title="item.name" aria-hidden="true"></i>
