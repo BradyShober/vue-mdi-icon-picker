@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@mdi/font": "^7.0.0",
-    "primeicons": "^8.0.1"
+    "primeicons": "^8.0.2"
   },
   "peerDependencies": {
     "vue": "^3.4.0",
