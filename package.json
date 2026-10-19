@@ -27,8 +27,7 @@
     "email": "brady.shober@gmail.com"
   },
   "dependencies": {
-    "@mdi/font": "^7.0.0",
-    "primeicons": "^8.0.1"
+    "@mdi/font": "^7.0.0"
   },
   "peerDependencies": {
     "vue": "^3.4.0",
